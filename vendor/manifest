@@ -1,0 +1,23 @@
+{
+	"version": 0,
+	"dependencies": [
+		{
+			"importpath": "github.com/joho/godotenv",
+			"repository": "https://github.com/joho/godotenv",
+			"revision": "4ed13390c0acd2ff4e371e64d8b97c8954138243",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/technoweenie/multipartstreamer",
+			"repository": "https://github.com/technoweenie/multipartstreamer",
+			"revision": "a90a01d73ae432e2611d178c18367fbaa13e0154",
+			"branch": "master"
+		},
+		{
+			"importpath": "gopkg.in/telegram-bot-api.v1",
+			"repository": "https://gopkg.in/telegram-bot-api.v1",
+			"revision": "e8dfdeeeb926884b031af3d99bad42615d469618",
+			"branch": "master"
+		}
+	]
+}
