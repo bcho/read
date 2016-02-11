@@ -2,7 +2,7 @@
 
 ## Usage
 
-### Record read articles
+### Record read article
 
 ```
 ME: /read http://example.com/an-article
