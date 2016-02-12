@@ -6,9 +6,8 @@
 
 ```
 ME: /read http://example.com/an-article
-read: Copy that, is any comments?
-ME: This article describe a cool technology... / nope. (just leave comment blank)
-read: Done!
+          This article describe a cool technology... / nope. (just leave comment blank)
+read: Copy that!
 ```
 
 ### Get read articles in a period
