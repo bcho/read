@@ -2,6 +2,7 @@
 package brain
 
 import (
+	"fmt"
 	"sort"
 	"sync"
 	"time"
@@ -9,11 +10,14 @@ import (
 	"github.com/SaidinWoT/timespan"
 )
 
+var EachBreak = fmt.Errorf("break")
+
 type Brain interface {
 	Remember(at time.Time, key, thing string) error
 	Get(key string) (string, bool)
 	GetInPeriod(period timespan.Span) []string
 	Forget(key string) error
+	Each(func(at time.Time, key, thing string) error) error
 }
 
 type thing struct {
@@ -105,6 +109,20 @@ func (b *brain) Forget(key string) error {
 				b.periodIndex[i+1:]...,
 			)
 			break
+		}
+	}
+
+	return nil
+}
+
+func (b brain) Each(iterator func(time.Time, string, string) error) error {
+	b.l.RLock()
+	defer b.l.RUnlock()
+
+	for key, thing := range b.things {
+		err := iterator(thing.At, key, thing.Payload)
+		if err != nil {
+			return err
 		}
 	}
 

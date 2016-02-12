@@ -182,3 +182,53 @@ func TestForget(t *testing.T) {
 		t.Errorf("expected 0 things, got: %v", retrievedThings)
 	}
 }
+
+func TestEach(t *testing.T) {
+	var err error
+
+	brain := NewBrain()
+	err = brain.Remember(parseTime("2006-01-02", "2015-01-01"), "k", "t")
+	if err != nil {
+		t.Error(err)
+	}
+	err = brain.Remember(parseTime("2006-01-02", "2015-02-01"), "k", "t")
+	if err != nil {
+		t.Error(err)
+	}
+	err = brain.Remember(parseTime("2006-01-02", "2015-02-01"), "k", "t")
+	if err != nil {
+		t.Error(err)
+	}
+	err = brain.Remember(parseTime("2006-01-02", "2015-02-02"), "k", "t")
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = brain.Each(func(at time.Time, key, thing string) error {
+		if key != "k" || thing != "t" {
+			t.Errorf("invalid thing: %s %s", key, thing)
+		}
+
+		return nil
+	})
+	if err != nil {
+		t.Error(err)
+	}
+
+	// break
+	counter := 0
+	err = brain.Each(func(at time.Time, key, thing string) error {
+		counter++
+		if key != "k" || thing != "t" {
+			t.Errorf("invalid thing: %s %s", key, thing)
+		}
+
+		return EachBreak
+	})
+	if counter != 1 {
+		t.Errorf("expected 1, got: %d", counter)
+	}
+	if err != EachBreak {
+		t.Error(err)
+	}
+}
