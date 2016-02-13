@@ -2,10 +2,12 @@ package robot
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"brain"
 
+	"github.com/bcho/timespan"
 	"github.com/mvdan/xurls"
 	tgbot "gopkg.in/telegram-bot-api.v1"
 )
@@ -93,7 +95,20 @@ func (r *robot) responseRead(msg tgbot.Message) string {
 
 func (r *robot) responseStats(_ tgbot.Message) string {
 	defer r.SetIdle()
-	return "stats"
+
+	daysBefore := 7
+	fmt.Sscanf(r.currCommanadArgument, "%d", &daysBefore)
+	statsDuration := time.Duration(-daysBefore*24) * time.Hour
+	statsSpan := timespan.New(time.Now(), statsDuration)
+
+	things := r.articles.GetInPeriod(statsSpan)
+	return fmt.Sprintf(
+		"You read %d article(s) during %s ~ %s:\n\n%s",
+		len(things),
+		statsSpan.Start().Format("2006-01-02"),
+		statsSpan.End().Format("2006-01-02"),
+		strings.Join(things, "\n-------------------------------\n\n"),
+	)
 }
 
 func (r *robot) responseBookmark(msg tgbot.Message) string {

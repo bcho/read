@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/SaidinWoT/timespan"
+	"github.com/bcho/timespan"
 )
 
 var EachBreak = fmt.Errorf("break")

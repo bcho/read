@@ -2,9 +2,9 @@
 	"version": 0,
 	"dependencies": [
 		{
-			"importpath": "github.com/SaidinWoT/timespan",
-			"repository": "https://github.com/SaidinWoT/timespan",
-			"revision": "164032e90ae638be1b0922bc405ad79b49da7b23",
+			"importpath": "github.com/bcho/timespan",
+			"repository": "https://github.com/bcho/timespan",
+			"revision": "1e05216695482c4902af3e80ff196b1b6a04af00",
 			"branch": "master"
 		},
 		{

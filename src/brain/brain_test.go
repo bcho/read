@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/SaidinWoT/timespan"
+	"github.com/bcho/timespan"
 )
 
 func parseTime(layout, str string) time.Time {
