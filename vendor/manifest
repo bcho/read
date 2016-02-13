@@ -14,10 +14,23 @@
 			"branch": "master"
 		},
 		{
+			"importpath": "github.com/mvdan/xurls",
+			"repository": "https://github.com/mvdan/xurls",
+			"revision": "b39c58e79eaf4e564a68bb34ae545194988f90c2",
+			"branch": "master"
+		},
+		{
 			"importpath": "github.com/technoweenie/multipartstreamer",
 			"repository": "https://github.com/technoweenie/multipartstreamer",
 			"revision": "a90a01d73ae432e2611d178c18367fbaa13e0154",
 			"branch": "master"
+		},
+		{
+			"importpath": "golang.org/x/net/idna",
+			"repository": "https://go.googlesource.com/net",
+			"revision": "cbbbe2bc0f2efdd2afb318d93f1eadb19350e4a3",
+			"branch": "master",
+			"path": "/idna"
 		},
 		{
 			"importpath": "gopkg.in/telegram-bot-api.v1",

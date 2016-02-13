@@ -6,6 +6,7 @@ import (
 
 	"brain"
 
+	"github.com/mvdan/xurls"
 	tgbot "gopkg.in/telegram-bot-api.v1"
 )
 
@@ -77,9 +78,12 @@ func (r *robot) responseIdle(_ tgbot.Message) string {
 func (r *robot) responseRead(msg tgbot.Message) string {
 	defer r.SetIdle()
 
-	// TODO extract & validate link format
-	link := r.currCommanadArgument
-	err := r.articles.Remember(msg.Time(), link, link)
+	link := extractFirstLink(r.currCommanadArgument)
+	if link == "" {
+		return "Oops, can't find any links."
+	}
+
+	err := r.articles.Remember(msg.Time(), link, r.currCommanadArgument)
 	if err != nil {
 		return err.Error()
 	}
@@ -95,9 +99,12 @@ func (r *robot) responseStats(_ tgbot.Message) string {
 func (r *robot) responseBookmark(msg tgbot.Message) string {
 	defer r.SetIdle()
 
-	// TODO extract & validate link
-	link := r.currCommanadArgument
-	err := r.bookmarks.Remember(msg.Time(), link, link)
+	link := extractFirstLink(r.currCommanadArgument)
+	if link == "" {
+		return "Oops, can't find any links."
+	}
+
+	err := r.bookmarks.Remember(msg.Time(), link, r.currCommanadArgument)
 	if err != nil {
 		return err.Error()
 	}
@@ -130,4 +137,8 @@ func (r *robot) responseRandom(_ tgbot.Message) string {
 	}
 
 	return randomLink
+}
+
+func extractFirstLink(content string) string {
+	return xurls.Strict.FindString(content)
 }
