@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	dumpInterval = time.Duration(3) * time.Second
+	dumpInterval = time.Duration(30) * time.Second
 )
 
 type Robot interface {
@@ -47,7 +47,9 @@ func NewRobot() *robot {
 }
 
 func (r *robot) Start() error {
-	r.SetIdle()
+	defer r.SetIdle()
+
+	r.restoreBrain()
 
 	go func() {
 		dumpTimeout := time.Tick(dumpInterval)
@@ -236,6 +238,58 @@ func (r robot) dumpBrain() {
 	}
 
 	log.Printf("dump brain finished")
+}
+
+func (r *robot) restoreBrain() {
+	file, err := os.Open(dumpFile())
+	if err != nil {
+		log.Printf("restore brain failed: %v", err)
+		return
+	}
+
+	data := make(map[string][]map[string]string)
+	if err := json.NewDecoder(file).Decode(&data); err != nil {
+		log.Printf("restore brain failed: %v", err)
+		return
+	}
+
+	if _, present := data["articles"]; !present {
+		log.Printf("courrpted dump file")
+		return
+	}
+	if _, present := data["bookmarks"]; !present {
+		log.Printf("courrpted dump file")
+		return
+	}
+
+	restoredArticles := 0
+	restoredBookmarks := 0
+	for _, thing := range data["articles"] {
+		at, err := time.Parse(time.RFC3339, thing["at"])
+		if err != nil {
+			log.Printf("courrpted dump file: %s", thing["at"])
+			continue
+		}
+		if err := r.articles.Remember(at, thing["key"], thing["thing"]); err != nil {
+			log.Printf("courrpted dump file")
+			continue
+		}
+		restoredArticles += 1
+	}
+	for _, thing := range data["bookmarks"] {
+		at, err := time.Parse(time.RFC3339, thing["at"])
+		if err != nil {
+			log.Printf("courrpted dump file: %s", thing["at"])
+			continue
+		}
+		if err := r.bookmarks.Remember(at, thing["key"], thing["thing"]); err != nil {
+			log.Printf("courrpted dump file")
+			continue
+		}
+		restoredBookmarks += 1
+	}
+
+	log.Printf("restored %d articles, %d bookmarks", restoredArticles, restoredBookmarks)
 }
 
 func extractFirstLink(content string) string {
