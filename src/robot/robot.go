@@ -1,7 +1,11 @@
 package robot
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -12,8 +16,13 @@ import (
 	tgbot "gopkg.in/telegram-bot-api.v1"
 )
 
+var (
+	dumpInterval = time.Duration(3) * time.Second
+)
+
 type Robot interface {
 	Start() error
+	Stop()
 	SetCommand(command, argument string)
 	Response(message tgbot.Message) tgbot.MessageConfig
 }
@@ -24,19 +33,41 @@ type robot struct {
 
 	articles  brain.Brain
 	bookmarks brain.Brain
+
+	stop chan struct{}
 }
 
 func NewRobot() *robot {
 	return &robot{
 		articles:  brain.NewBrain(),
 		bookmarks: brain.NewBrain(),
+
+		stop: make(chan struct{}),
 	}
 }
 
 func (r *robot) Start() error {
 	r.SetIdle()
 
+	go func() {
+		dumpTimeout := time.Tick(dumpInterval)
+		for {
+			select {
+			case <-r.stop:
+				r.stop <- struct{}{}
+				return
+			case <-dumpTimeout:
+				r.dumpBrain()
+			}
+		}
+	}()
+
 	return nil
+}
+
+func (r robot) Stop() {
+	r.stop <- struct{}{}
+	<-r.stop
 }
 
 func (r *robot) SetCommand(command, argument string) {
@@ -154,6 +185,67 @@ func (r *robot) responseRandom(_ tgbot.Message) string {
 	return randomLink
 }
 
+func (r robot) dumpBrain() {
+	var (
+		err       error
+		articles  []map[string]string
+		bookmarks []map[string]string
+	)
+
+	err = r.articles.Each(func(at time.Time, key, thing string) error {
+		articles = append(articles, map[string]string{
+			"at":    at.Format(time.RFC3339),
+			"key":   key,
+			"thing": thing,
+		})
+
+		return nil
+	})
+	if err != nil {
+		log.Printf("dump brain failed: %v", err)
+		return
+	}
+
+	err = r.bookmarks.Each(func(at time.Time, key, thing string) error {
+		bookmarks = append(bookmarks, map[string]string{
+			"at":    at.Format(time.RFC3339),
+			"key":   key,
+			"thing": thing,
+		})
+
+		return nil
+	})
+	if err != nil {
+		log.Printf("dump brain failed: %v", err)
+		return
+	}
+
+	data := map[string][]map[string]string{
+		"articles":  articles,
+		"bookmarks": bookmarks,
+	}
+	b, err := json.Marshal(data)
+	if err != nil {
+		log.Printf("dump brain failed: %v", err)
+		return
+	}
+
+	if err := ioutil.WriteFile(dumpFile(), b, 0644); err != nil {
+		log.Printf("dump brain failed: %v", err)
+		return
+	}
+
+	log.Printf("dump brain finished")
+}
+
 func extractFirstLink(content string) string {
 	return xurls.Strict.FindString(content)
+}
+
+func dumpFile() string {
+	f := os.Getenv("DUMP")
+	if f == "" {
+		f = "./.dump"
+	}
+	return f
 }
