@@ -237,7 +237,7 @@ func (r robot) dumpBrain() {
 		return
 	}
 
-	log.Printf("dump brain finished")
+	log.Printf("dump brain to %s finished", dumpFile())
 }
 
 func (r *robot) restoreBrain() {
@@ -289,7 +289,12 @@ func (r *robot) restoreBrain() {
 		restoredBookmarks += 1
 	}
 
-	log.Printf("restored %d articles, %d bookmarks", restoredArticles, restoredBookmarks)
+	log.Printf(
+		"restored %d articles, %d bookmarks from %s",
+		restoredArticles,
+		restoredBookmarks,
+		dumpFile(),
+	)
 }
 
 func extractFirstLink(content string) string {
