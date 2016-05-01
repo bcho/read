@@ -1,0 +1,26 @@
+hash: 54bf9de74aa514a05133a52dfe24aa951ad31b3d673de8123c3381639bd82a4b
+updated: 2016-05-01T18:57:46.705372443+08:00
+imports:
+- name: github.com/bcho/timespan
+  version: ""
+  repo: https://github.com/bcho/timespan
+- name: github.com/joho/godotenv
+  version: ""
+  repo: https://github.com/joho/godotenv
+  subpackages:
+  - autoload
+- name: github.com/mvdan/xurls
+  version: ""
+  repo: https://github.com/mvdan/xurls
+- name: github.com/technoweenie/multipartstreamer
+  version: ""
+  repo: https://github.com/technoweenie/multipartstreamer
+- name: golang.org/x/net
+  version: ""
+  repo: https://go.googlesource.com/net
+  subpackages:
+  - idna
+- name: gopkg.in/telegram-bot-api.v1
+  version: ""
+  repo: https://gopkg.in/telegram-bot-api.v1
+devImports: []

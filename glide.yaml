@@ -1,0 +1,24 @@
+package: github.com/bcho/read
+import:
+- package: github.com/bcho/timespan
+  version: 1e05216695482c4902af3e80ff196b1b6a04af00
+  repo: https://github.com/bcho/timespan
+- package: github.com/joho/godotenv
+  version: 4ed13390c0acd2ff4e371e64d8b97c8954138243
+  repo: https://github.com/joho/godotenv
+  subpackages:
+  - autoload
+- package: github.com/mvdan/xurls
+  version: b39c58e79eaf4e564a68bb34ae545194988f90c2
+  repo: https://github.com/mvdan/xurls
+- package: github.com/technoweenie/multipartstreamer
+  version: a90a01d73ae432e2611d178c18367fbaa13e0154
+  repo: https://github.com/technoweenie/multipartstreamer
+- package: golang.org/x/net
+  version: cbbbe2bc0f2efdd2afb318d93f1eadb19350e4a3
+  repo: https://go.googlesource.com/net
+  subpackages:
+  - idna
+- package: gopkg.in/telegram-bot-api.v1
+  version: e8dfdeeeb926884b031af3d99bad42615d469618
+  repo: https://gopkg.in/telegram-bot-api.v1

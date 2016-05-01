@@ -9,8 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"brain"
-
+	"github.com/bcho/read/brain"
 	"github.com/bcho/timespan"
 	"github.com/mvdan/xurls"
 	tgbot "gopkg.in/telegram-bot-api.v1"

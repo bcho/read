@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 	"os"
-	"robot"
 
+	"github.com/bcho/read/robot"
 	_ "github.com/joho/godotenv/autoload"
-	"gopkg.in/telegram-bot-api.v1"
+	tgbotapi "gopkg.in/telegram-bot-api.v1"
 )
 
 func main() {
