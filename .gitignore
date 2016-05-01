@@ -1,4 +1,5 @@
 .env
 .dump
+read
 pkg/
 bin/
