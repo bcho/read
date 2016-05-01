@@ -1,6 +1,7 @@
 # Read
 
 [![Build Status](https://travis-ci.org/bcho/read.svg)](https://travis-ci.org/bcho/read)
+[![](https://godoc.org/github.com/bcho/read?status.svg)](http://godoc.org/github.com/bcho/read)
 
 ## Usage
 
