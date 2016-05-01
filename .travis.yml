@@ -3,4 +3,5 @@ language: go
 go:
   - tip
 
+install: .build/deps.sh
 script: make test
