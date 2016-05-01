@@ -1,5 +1,7 @@
 # Read
 
+[![Build Status](https://travis-ci.org/bcho/read.svg)](https://travis-ci.org/bcho/read)
+
 ## Usage
 
 ### Record read article
@@ -15,7 +17,7 @@ read: Copy that! New link http://example.com/an-article added.
 ```
 ME: /stats last week
 read: You read 3 articles during 2016-01-01 ~ 2016-01-07
-      
+
       http://example.com/an-article
 
       This article describe a cool technology...
