@@ -6,4 +6,5 @@ const (
 	Stats    = "/stats"
 	Bookmark = "/bookmark"
 	Random   = "/random"
+	Publish  = "/publish"
 )

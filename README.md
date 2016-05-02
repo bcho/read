@@ -39,3 +39,10 @@ read: Roger that! New link http://example.com/another-article added.
 ME: /random
 read: http://example.com/another-article / No more bookmarks, nice!
 ```
+
+### Publish a post
+
+```
+ME: /publish
+read: published at https://medium.com/@artofhuh/xxxx
+```

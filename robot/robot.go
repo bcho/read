@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/bcho/read/brain"
+	"github.com/bcho/read/publisher"
 	"github.com/bcho/timespan"
 	"github.com/mvdan/xurls"
 	tgbot "gopkg.in/telegram-bot-api.v1"
@@ -32,6 +33,7 @@ type robot struct {
 
 	articles  brain.Brain
 	bookmarks brain.Brain
+	publisher publisher.Publisher
 
 	stop chan struct{}
 }
@@ -40,6 +42,8 @@ func NewRobot() *robot {
 	return &robot{
 		articles:  brain.NewBrain(),
 		bookmarks: brain.NewBrain(),
+
+		publisher: publisher.NewMediumPublisher(os.Getenv("MEDIUM_TOKEN")),
 
 		stop: make(chan struct{}),
 	}
@@ -97,6 +101,8 @@ func (r *robot) Response(message tgbot.Message) tgbot.MessageConfig {
 		response = r.responseBookmark(message)
 	case Random:
 		response = r.responseRandom(message)
+	case Publish:
+		response = r.responsePublish(message)
 	}
 
 	reply := tgbot.NewMessage(message.Chat.ID, response)
@@ -184,6 +190,22 @@ func (r *robot) responseRandom(_ tgbot.Message) string {
 	}
 
 	return randomLink
+}
+
+func (r *robot) responsePublish(_ tgbot.Message) string {
+	defer r.SetIdle()
+
+	daysBefore := 7
+	fmt.Sscanf(r.currCommanadArgument, "%d", &daysBefore)
+	statsDuration := time.Duration(-daysBefore*24) * time.Hour
+	statsSpan := timespan.New(time.Now(), statsDuration)
+	things := r.articles.GetInPeriod(statsSpan)
+
+	postUrl, err := r.publisher.Publish(statsSpan, things)
+	if err != nil {
+		return err.Error()
+	}
+	return postUrl
 }
 
 func (r robot) dumpBrain() {
