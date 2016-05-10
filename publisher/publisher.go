@@ -14,8 +14,8 @@ type Publisher interface {
 func title(span timespan.Span, articles []string) string {
 	return fmt.Sprintf(
 		"Reading note on %s ~ %s",
-		span.Start().Format("2006-01-02"),
-		span.End().Format("2006-01-02"),
+		span.Start().Format("2006.01.02"),
+		span.End().Format("2006.01.02"),
 	)
 }
 

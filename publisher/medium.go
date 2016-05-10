@@ -2,7 +2,7 @@ package publisher
 
 import (
 	"github.com/bcho/timespan"
-	"github.com/medium/medium-sdk-go"
+	medium "github.com/medium/medium-sdk-go"
 )
 
 type mediumPublisher struct {
@@ -26,8 +26,8 @@ func (m mediumPublisher) Publish(span timespan.Span, articles []string) (string,
 		UserID:        user.ID,
 		Title:         title(span, articles),
 		Content:       content(span, articles),
-		ContentFormat: medium.ContentFormatMarkdown,
-		PublishStatus: medium.PublishStatusPublic,
+		ContentFormat: medium.ContentFormatHTML,
+		PublishStatus: medium.PublishStatusDraft,
 	})
 	if err != nil {
 		return "", err
